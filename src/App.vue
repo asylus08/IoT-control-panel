@@ -30,9 +30,11 @@ import ConnectionStats from './components/ConnectionStats.vue'
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
@@ -51,7 +53,7 @@ import ConnectionStats from './components/ConnectionStats.vue'
     align-items: center;
   }
 
-  .main-controls > * {
+  .main-controls>* {
     width: 100%;
     max-width: 500px;
   }

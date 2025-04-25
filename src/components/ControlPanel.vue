@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import * as api from '../api/api.ts';
+
+async function doorActionHandler() {}
+async function alarmActionHandler() {}
+async function tempActionHandler() {}
+async function testActionHandler() {}
+
 </script>
 
 <template>
@@ -31,8 +37,8 @@ import * as api from '../api/api.ts';
       <div class="controls-row">
         <div class="door-control-section stacked-control">
           <label>Door:</label>
-          <button class="green-btn">Open</button>
-          <button class="red-btn">Close</button>
+          <button class="green-btn" @click="api.triggerDoorAction('OPEN_DOOR')">Open</button>
+          <button class="red-btn" @click="api.triggerDoorAction('CLOSE_DOOR')">Close</button>
         </div>
   
         <div class="alarm-control-section stacked-control">
