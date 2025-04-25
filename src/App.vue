@@ -1,42 +1,27 @@
-
 <script setup lang="ts">
 import ControlPanel from './components/ControlPanel.vue'
-import * as api from './api/api.ts';
-import {ref,  onMounted  } from 'vue';
-
-let isConnected = ref(false);
-onMounted(async () => {
-  isConnected.value = await api.testConnection()
-})
+import ConnectionStats from './components/ConnectionStats.vue'
 </script>
 
 <template>
   <div class="title">
     <h1>IoT Control Panel</h1>
-    <img src="./assets/vue.svg" class="logo"/>
+    <img src="./assets/vue.svg" class="logo" />
   </div>
 
-  <div class="connection-status">
-    <p>Connection status: </p>
-    <p v-if="isConnected" class="sucess-message">Connection with IoT device secured!</p>
-    <p v-else class="error-message">Connection with IoT device failed!</p>
+  <div class="main-controls">
+    <ConnectionStats />
+    <ControlPanel />
   </div>
-  
-  <ControlPanel />
-
 </template>
-<style scoped>
-.sucess-message {
-  color: green;
-}
 
-.error-message {
-  color: red;
-}
-.connection-status {
-  justify-content: center;
+<style scoped>
+.title {
   display: flex;
-  gap:5px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .logo {
@@ -52,8 +37,23 @@ onMounted(async () => {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
 
-.title {
-  justify-content: center;
+.main-controls {
   display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .main-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .main-controls > * {
+    width: 100%;
+    max-width: 500px;
+  }
 }
 </style>
