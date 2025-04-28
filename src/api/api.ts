@@ -1,8 +1,10 @@
 import axios from 'axios'
 
+const url = "http://10.166.30.126:5000/";
+
 export async function testConnection() {
     try {
-        const response = await axios.get('http://127.0.0.1:8080/test-connection');
+        const response = await axios.get(`${url}test-connection`);
         console.log('Response:', response.data);
         return true;
     } catch (error) {
@@ -13,7 +15,7 @@ export async function testConnection() {
 
 export async function triggerDoorAction(action: string) {
     try {
-        const response = await axios.post('http://127.0.0.1:8080/actions/door', {
+        const response = await axios.post(`${url}actions/door`, {
             action: action
         });
 
@@ -35,7 +37,7 @@ export async function triggerDoorAction(action: string) {
 
 export async function triggerAlarmAction(action: string) {
     try {
-        const response = await axios.post('http://127.0.0.1:8080/actions/alarm', {
+        const response = await axios.post(`${url}actions/alarm`, {
             action: action
         });
 
@@ -57,7 +59,7 @@ export async function triggerAlarmAction(action: string) {
 
 export async function triggerAdjustTemp(action: string) {
     try {
-        const response = await axios.post('http://127.0.0.1:8080/actions/temperature', {
+        const response = await axios.post(`${url}actions/temperature`, {
             action: action
         });
 
@@ -79,7 +81,7 @@ export async function triggerAdjustTemp(action: string) {
 
 export async function triggerTestMode() {
     try {
-        const response = await axios.post('http://127.0.0.1:8080/settings/test-mode');
+        const response = await axios.post(`${url}settings/test-mode`);
 
         if (response.status === 200) {
             console.log('Success:', response.data.message);

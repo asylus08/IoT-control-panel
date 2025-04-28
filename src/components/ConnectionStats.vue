@@ -1,29 +1,46 @@
 <script setup lang="ts">
 import * as api from '../api/api.ts';
 import { ref, onMounted } from 'vue';
+import db from '../firebase-config.ts';
+import { ref as dbRef, set, get, child } from "firebase/database";
 
-const isConnected = ref(false);
+const isIotConnected = ref(false);
+const isDBConnected = ref(false);
 
-async function checkConnection() {
-  isConnected.value = await api.testConnection();
+async function checkIoTConnection() {
+  isIotConnected.value = await api.testConnection();
 }
 
-onMounted(checkConnection);
+async function testFirebaseConnection() {
+  try {
+    await set(dbRef(db, 'testConnection'), {
+      status: 'connected',
+      timestamp: Date.now(),
+    });
+    isDBConnected.value = true;
+  } catch (error) {
+    isDBConnected.value = false;
+    console.log('Erreur du test de connection avec Firebase: ', error);
+  }
+}
+
+onMounted(checkIoTConnection);
+onMounted(testFirebaseConnection)
 </script>
 
 <template>
   <div class="stats-panel">
-    <button @click="checkConnection">Tester la connexion</button>
+    <button @click="checkIoTConnection">Tester la connexion</button>
 
     <div class="connection-status">
       <p>IoT device connection:</p>
-      <p v-if="isConnected" class="success-message">Connection with IoT device secured!</p>
+      <p v-if="isIotConnected" class="success-message">Connection with IoT device secured!</p>
       <p v-else class="error-message">Connection with IoT device failed!</p>
     </div>
 
     <div class="connection-status">
       <p>Firebase connection:</p>
-      <p v-if="isConnected" class="success-message">Connection with Firebase secured!</p>
+      <p v-if="isDBConnected" class="success-message">Connection with Firebase secured!</p>
       <p v-else class="error-message">Connection with Firebase failed!</p>
     </div>
   </div>

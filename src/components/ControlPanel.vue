@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import * as api from '../api/api.ts';
+import { ref } from 'vue';
+import db from '../firebase-config.ts';
 
-async function doorActionHandler() {}
-async function alarmActionHandler() {}
-async function tempActionHandler() {}
-async function testActionHandler() {}
+const isTestMode = ref(false);
+
+async function testModeHandler() {
+  let response = await api.triggerTestMode();
+  isTestMode.value = response || false;
+}
 
 </script>
 
@@ -29,8 +33,8 @@ async function testActionHandler() {}
       <div class="temp-control-section">
         <label>Adjust Temperature:</label>
         <div class="button-group">
-          <button class="green-btn">+</button>
-          <button class="red-btn">-</button>
+          <button class="green-btn" @click="api.triggerAdjustTemp('RISE_TEMP')">+</button>
+          <button class="red-btn" @click="api.triggerAdjustTemp('LOWER_TEMP')">-</button>
         </div>
       </div>
   
@@ -43,8 +47,8 @@ async function testActionHandler() {}
   
         <div class="alarm-control-section stacked-control">
           <label>Alarm:</label>
-          <button class="green-btn">Activate</button>
-          <button class="red-btn">Deactivate</button>
+          <button class="green-btn" @click="api.triggerAlarmAction('ACTIVATE_ALARM')">Activate</button>
+          <button class="red-btn" @click="api.triggerAlarmAction('DEACTIVATE_ALARM')">Deactivate</button>
         </div>
       </div>
     </div>
