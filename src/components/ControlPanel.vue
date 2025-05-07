@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as api from '../api/api.ts';
 import { ref, onMounted } from 'vue';
-import {ref as dbRef, onValue } from 'firebase/database';
+import { query, limitToLast, onValue, orderByKey, ref as dbRef } from 'firebase/database';
 import db from '../firebase-config.ts';
 
 const isTestMode = ref(false);
@@ -9,17 +9,14 @@ const isDoorOpen = ref(false);
 const currentTemp = ref(0.0);
 
 onMounted(() => {
-  const dataRef = dbRef(db, '/data');
+  const dataRef = query(dbRef(db, '/data'), orderByKey(), limitToLast(1));
   onValue(dataRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
-      const temperatures = Object.values(data)
-        .map((entry: any) => entry.temperature)
-        .filter((temp: any) => typeof temp === 'number');
-
-      currentTemp.value = temperatures[temperatures.length - 1] ?? 0;
-
-      console.log('All temperatures:', temperatures);
+      const lastEntry = Object.values(data)[0] as any;
+      if (typeof lastEntry.temperature === 'number') {
+        currentTemp.value = lastEntry.temperature;
+      }
     }
   });
 });
