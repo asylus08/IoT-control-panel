@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = "http://192.168.2.118:5000/";
+const url = "https://1d4a-64-228-167-250.ngrok-free.app/";
 
 export async function testConnection() {
     try {

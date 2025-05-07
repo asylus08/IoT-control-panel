@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ControlPanel from './components/ControlPanel.vue'
 import ConnectionStats from './components/ConnectionStats.vue'
+import HistoryPanel from './components/HistoryPanel.vue';
 </script>
 
 <template>
@@ -10,10 +11,15 @@ import ConnectionStats from './components/ConnectionStats.vue'
   </div>
 
   <div class="main-controls">
-    <ConnectionStats />
+    <div class="chart-stats-wrapper">
+      <ConnectionStats />
+      <HistoryPanel />
+    </div>
+
     <ControlPanel />
   </div>
 </template>
+
 
 <style scoped>
 .title {
@@ -47,13 +53,21 @@ import ConnectionStats from './components/ConnectionStats.vue'
   flex-wrap: wrap;
 }
 
+.chart-stats-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 55px;
+  height: 100%;
+  max-height: 600px; 
+}
+
 @media (max-width: 768px) {
   .main-controls {
     flex-direction: column;
     align-items: center;
   }
 
-  .main-controls>* {
+  .main-controls > * {
     width: 100%;
     max-width: 500px;
   }

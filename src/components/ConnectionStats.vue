@@ -2,7 +2,7 @@
 import * as api from '../api/api.ts';
 import { ref, onMounted } from 'vue';
 import db from '../firebase-config.ts';
-import { ref as dbRef, set, get, child } from "firebase/database";
+import { ref as dbRef, set } from "firebase/database";
 
 const isIotConnected = ref(false);
 const isDBConnected = ref(false);
@@ -30,7 +30,7 @@ onMounted(testFirebaseConnection)
 
 <template>
   <div class="stats-panel">
-    <button @click="checkIoTConnection">Tester la connexion</button>
+    <button @click="checkIoTConnection">Test connection</button>
 
     <div class="connection-status">
       <p>IoT device connection:</p>
@@ -51,10 +51,14 @@ onMounted(testFirebaseConnection)
   border: 2px solid #444;
   border-radius: 10px;
   padding: 20px;
+  padding-top: 20px;
+  padding-bottom: 50px;
   background: #1f1f1f;
   color: white;
-  max-width: 600px;
+  width: 100%; 
+  max-width: 700px;
   margin: auto;
+  box-sizing: border-box;
 }
 
 .success-message {
