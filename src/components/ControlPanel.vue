@@ -22,19 +22,26 @@ onMounted(() => {
 });
 
 async function testModeHandler() {
-  let response = await api.triggerTestMode();
-  isTestMode.value = response || false;
+  const response = await api.triggerTestMode();
+  if (response !== undefined) {
+    isTestMode.value = response;
+  }
 }
 
 async function adjustTemp(action: string) {
-  let response = await api.triggerAdjustTemp(action);
-  currentTemp.value = response || currentTemp.value;
+  const response = await api.triggerAdjustTemp(action);
+  if (response !== undefined) {
+    currentTemp.value = response;
+  }
 }
 
 async function doorActionHandler(action: string) {
-  let response = await api.triggerDoorAction(action);
-  isDoorOpen.value = response || isDoorOpen.value;
+  const response = await api.triggerDoorAction(action);
+  if (response !== undefined) {
+    isDoorOpen.value = response;
+  }
 }
+
 
 </script>
 
