@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = "http://10.166.30.126:5000/";
+const url = "http://192.168.2.118:5000/";
 
 export async function testConnection() {
     try {
@@ -20,8 +20,8 @@ export async function triggerDoorAction(action: string) {
         });
 
         if (response.status === 200) {
-            console.log('Success:', response.data.message);
-            return response.data;
+            console.log('Success:', response);
+            return response.data[0].is_door_open;
         } else {
             console.error('Unexpected response:', response);
             return { success: false, error: 'Unexpected response from server' };
@@ -42,7 +42,7 @@ export async function triggerAlarmAction(action: string) {
         });
 
         if (response.status === 200) {
-            console.log('Success:', response.data.message);
+            console.log('Success:', response);
             return response.data;
         } else {
             console.error('Unexpected response:', response);
@@ -64,8 +64,8 @@ export async function triggerAdjustTemp(action: string) {
         });
 
         if (response.status === 200) {
-            console.log('Success:', response.data.message);
-            return response.data;
+            console.log('Success:', response);
+            return response.data[0].temp;
         } else {
             console.error('Unexpected response:', response);
             return { success: false, error: 'Unexpected response from server' };
@@ -84,8 +84,8 @@ export async function triggerTestMode() {
         const response = await axios.post(`${url}settings/test-mode`);
 
         if (response.status === 200) {
-            console.log('Success:', response.data.message);
-            return response.data;
+            console.log('Success:', response);
+            return response.data[0].test_mode;
         } else {
             console.error('Unexpected response:', response);
             return { success: false, error: 'Unexpected response from server' };

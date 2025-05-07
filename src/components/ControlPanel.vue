@@ -1,13 +1,42 @@
 <script setup lang="ts">
 import * as api from '../api/api.ts';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import {ref as dbRef, onValue } from 'firebase/database';
 import db from '../firebase-config.ts';
 
 const isTestMode = ref(false);
+const isDoorOpen = ref(false);
+const currentTemp = ref(0.0);
+
+onMounted(() => {
+  const dataRef = dbRef(db, '/data');
+  onValue(dataRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      const temperatures = Object.values(data)
+        .map((entry: any) => entry.temperature)
+        .filter((temp: any) => typeof temp === 'number');
+
+      currentTemp.value = temperatures[temperatures.length - 1] ?? 0;
+
+      console.log('All temperatures:', temperatures);
+    }
+  });
+});
 
 async function testModeHandler() {
   let response = await api.triggerTestMode();
   isTestMode.value = response || false;
+}
+
+async function adjustTemp(action: string) {
+  let response = await api.triggerAdjustTemp(action);
+  currentTemp.value = response || currentTemp.value;
+}
+
+async function doorActionHandler(action: string) {
+  let response = await api.triggerDoorAction(action);
+  isDoorOpen.value = response || isDoorOpen.value;
 }
 
 </script>
@@ -17,32 +46,32 @@ async function testModeHandler() {
       <div class="info-section">
         <div class="info-row">
           <label>Temperature:</label>
-          <p class="value-bubble">24.6°C</p>
+          <p class="value-bubble">{{ currentTemp.toFixed(1) }}°C</p>
         </div>
         <div class="info-row">
           <label>Door State:</label>
-          <p class="value-bubble">Closed</p>
+          <p class="value-bubble">{{ isDoorOpen ? 'Open' : 'Closed' }}</p>
         </div>
       </div>
   
       <div class="test-mode-section">
-        <button class="toggle-btn">Activate/Deactivate Test Mode</button>
-        <p>Test Mode: <span class="status-text">Off</span></p>
+        <button class="toggle-btn" @click="testModeHandler">Activate/Deactivate Test Mode</button>
+        <p>Test Mode: <span class="status-text">{{ isTestMode ? 'On' : 'Off' }}</span></p>
       </div>
   
       <div class="temp-control-section">
         <label>Adjust Temperature:</label>
         <div class="button-group">
-          <button class="green-btn" @click="api.triggerAdjustTemp('RISE_TEMP')">+</button>
-          <button class="red-btn" @click="api.triggerAdjustTemp('LOWER_TEMP')">-</button>
+          <button class="green-btn" @click="adjustTemp('RISE_TEMP')">+</button>
+          <button class="red-btn" @click="adjustTemp('LOWER_TEMP')">-</button>
         </div>
       </div>
   
       <div class="controls-row">
         <div class="door-control-section stacked-control">
           <label>Door:</label>
-          <button class="green-btn" @click="api.triggerDoorAction('OPEN_DOOR')">Open</button>
-          <button class="red-btn" @click="api.triggerDoorAction('CLOSE_DOOR')">Close</button>
+          <button class="green-btn" @click="doorActionHandler('OPEN_DOOR')">Open</button>
+          <button class="red-btn" @click="doorActionHandler('CLOSE_DOOR')">Close</button>
         </div>
   
         <div class="alarm-control-section stacked-control">
