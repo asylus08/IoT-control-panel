@@ -66,22 +66,22 @@ async function doorActionHandler(action: string) {
       <div class="temp-control-section">
         <label>Adjust Temperature:</label>
         <div class="button-group">
-          <button class="green-btn" @click="adjustTemp('RISE_TEMP')">+</button>
-          <button class="red-btn" @click="adjustTemp('LOWER_TEMP')">-</button>
+          <button class="green-btn" @click="adjustTemp('RISE_TEMP')" :disabled="!isTestMode">+</button>
+          <button class="red-btn" @click="adjustTemp('LOWER_TEMP')" :disabled="!isTestMode">-</button>
         </div>
       </div>
   
       <div class="controls-row">
         <div class="door-control-section stacked-control">
           <label>Door:</label>
-          <button class="green-btn" @click="doorActionHandler('OPEN_DOOR')">Open</button>
-          <button class="red-btn" @click="doorActionHandler('CLOSE_DOOR')">Close</button>
+          <button class="green-btn" @click="doorActionHandler('OPEN_DOOR')" :disabled="!isTestMode">Open</button>
+          <button class="red-btn" @click="doorActionHandler('CLOSE_DOOR')" :disabled="!isTestMode">Close</button>
         </div>
   
         <div class="alarm-control-section stacked-control">
           <label>Alarm:</label>
-          <button class="green-btn" @click="api.triggerAlarmAction('ACTIVATE_ALARM')">Activate</button>
-          <button class="red-btn" @click="api.triggerAlarmAction('DEACTIVATE_ALARM')">Deactivate</button>
+          <button class="green-btn" @click="api.triggerAlarmAction('ACTIVATE_ALARM')" :disabled="!isTestMode">Activate</button>
+          <button class="red-btn" @click="api.triggerAlarmAction('DEACTIVATE_ALARM')" :disabled="!isTestMode">Deactivate</button>
         </div>
       </div>
     </div>
@@ -208,6 +208,11 @@ async function doorActionHandler(action: string) {
   label {
     font-weight: bold;
     margin-bottom: 5px;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
   </style>
   
